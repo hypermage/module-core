@@ -1,0 +1,32 @@
+{
+  "name": "hypermage/module-core",
+  "version": "1.0.0",
+  "description": "N/A",
+  "type": "magento2-module",
+  "require": {
+    "magento/framework": "*",
+    "magento/module-store": "^101.1"
+  },
+  "license": [
+    "Proprietary"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Hypermage\\Core\\": ""
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://repo.magento.com/"
+    }
+  ],
+  "config": {
+    "allow-plugins": {
+      "magento/composer-dependency-version-audit-plugin": true
+    }
+  }
+}
