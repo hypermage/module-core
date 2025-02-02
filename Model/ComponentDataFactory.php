@@ -24,7 +24,7 @@ readonly class ComponentDataFactory
     final public const array IGNORED_DATA_KEYS = ['jsLayout'];
 
     public function __construct(
-        private readonly ObjectManagerInterface $objectManger,
+        private ObjectManagerInterface $objectManger,
     )
     {
     }

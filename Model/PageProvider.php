@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hypermage\Core\Model;
 
-use Hypermage\Core\Controller\Block\Block;
+use Hypermage\Core\Controller\Component\Component;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Result\Page;
@@ -26,7 +26,7 @@ readonly class PageProvider
     {
         $cmsPage = $this->pageFactory->create(false, ['isIsolated' => true]);
 
-        $cmsPage->getLayout()->getUpdate()->removeHandle(Block::LAYOUT_HANDLE);
+        $cmsPage->getLayout()->getUpdate()->removeHandle(Component::LAYOUT_HANDLE);
         $cmsPage->getLayout()->getUpdate()->addPageHandles($handles);
 
         return $cmsPage;

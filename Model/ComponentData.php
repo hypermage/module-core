@@ -15,22 +15,27 @@ readonly class ComponentData
         protected string $name,
 
         protected array  $objects = [],
-        protected array  $data = []
+        protected array  $data = [],
     )
     {
     }
 
     public function __toString(): string
     {
-        return http_build_query([
-            'class' => get_class($this->class),
-            'template' => $this->template,
-            'fullActionName' => $this->fullActionName,
-            'layoutHandles' => $this->layoutHandles,
-            'name' => $this->name,
-            'objects' => $this->objects,
-            'data' => $this->data
-        ]);
+        return http_build_query($this->toArray());
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'class' => get_class($this->getClass()),
+            'template' => $this->getTemplate(),
+            'fullActionName' => $this->getFullActionName(),
+            'layoutHandles' => $this->getLayoutHandles(),
+            'name' => $this->getName(),
+            'objects' => $this->getObjects(),
+            'data' => $this->getData(),
+        ];
     }
 
     public function getClass(): object

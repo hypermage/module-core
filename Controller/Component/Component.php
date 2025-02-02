@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Hypermage\Core\Controller\Block;
+namespace Hypermage\Core\Controller\Component;
 
 use Exception;
 use Hypermage\Core\Controller\Result\Component as ComponentResult;
-use Hypermage\Core\Model\ComponentFactory;
 use Hypermage\Core\Model\PageProvider;
 use Hypermage\Core\Model\Request;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -16,16 +15,15 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Psr\Log\LoggerInterface;
 
-class Block implements HttpGetActionInterface
+class Component implements HttpGetActionInterface
 {
-    final public const string LAYOUT_HANDLE = 'hypermage_block_block';
+    final public const string LAYOUT_HANDLE = 'hypermage_component_component';
 
     private const int HTTP_BAD_REQUEST = 400;
     private const int HTTP_UNAUTHORIZED = 401;
     private const int HTTP_SERVER_ERROR = 500;
 
     public function __construct(
-        private readonly ComponentFactory     $componentFactory,
         private readonly ComponentResult      $componentResult,
         private readonly LoggerInterface      $logger,
         private readonly PageFactory          $pageFactory,
@@ -60,12 +58,16 @@ class Block implements HttpGetActionInterface
                 return $this->returnStatusCode(self::HTTP_BAD_REQUEST);
             }
 
-            $this->componentFactory->fromBlock($requestedBlock, $componentData);
+            $data = $componentData->getData();
+            foreach ($data as $key => $value) {
+                $requestedBlock->setData($key, $value);
+            }
+
             $this->componentResult->setBlock($requestedBlock);
 
             return $this->componentResult;
         } catch (Exception $e) {
-            $this->logger->error('Error executing block controller', ['exception' => $e]);
+            $this->logger->error('Error executing component controller', ['exception' => $e]);
             return $this->returnStatusCode(self::HTTP_SERVER_ERROR);
         }
     }

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Hypermage\Core\ViewModel;
 
-use Hypermage\Core\Model\ComponentDataFactory;
+use Hypermage\Core\Model\HxParams;
+use Hypermage\Core\Model\HxParamsFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\Element\BlockInterface;
@@ -13,18 +14,17 @@ readonly class Htmx implements ArgumentInterface
 {
     public function __construct(
         protected RequestInterface     $request,
-        protected ComponentDataFactory $componentDataFactory,
+        protected HxParamsFactory      $hxParamsFactory,
     )
     {
     }
 
-    public function getRequestUrl(BlockInterface $block): string
+    /**
+     * Any modifications on the block data before calling this method will persist.
+     */
+    public function getHxParams(BlockInterface $block): HxParams
     {
-        $componentData = $this->componentDataFactory->fromBlock($block);
-
-        $query = $componentData . '&signature=' . $componentData->getSignature();
-
-        return "/hypermage/block/block?{$query}";
+        return $this->hxParamsFactory->create($block);
     }
 
     public function isHtmxRequest(): bool
