@@ -1,5 +1,5 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework/Event/etc/events.xsd">
     <event name="layout_load_before">
-        <observer name="vendor_module_add_custom_layout" instance="Hypermage\Core\Observer\LayoutHandler" />
+        <observer name="hypermage_core_layout_handler" instance="Hypermage\Core\Observer\LayoutHandler" />
     </event>
 </config>

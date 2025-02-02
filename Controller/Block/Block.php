@@ -7,7 +7,6 @@ namespace Hypermage\Core\Controller\Block;
 use Exception;
 use Hypermage\Core\Controller\Result\Component as ComponentResult;
 use Hypermage\Core\Model\ComponentFactory;
-use Hypermage\Core\Model\ComponentDataFactory;
 use Hypermage\Core\Model\PageProvider;
 use Hypermage\Core\Model\Request;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -26,14 +25,13 @@ class Block implements HttpGetActionInterface
     private const int HTTP_SERVER_ERROR = 500;
 
     public function __construct(
-        private readonly PageProvider         $pageProvider,
         private readonly ComponentFactory     $componentFactory,
+        private readonly ComponentResult      $componentResult,
         private readonly LoggerInterface      $logger,
         private readonly PageFactory          $pageFactory,
-        private readonly ComponentResult      $componentResult,
+        private readonly PageProvider         $pageProvider,
         private readonly Request              $request,
         private readonly ResultFactory        $resultFactory,
-        private readonly ComponentDataFactory $componentDataFactory,
     )
     {
     }
