@@ -12,6 +12,7 @@ readonly class Request
     public function __construct(
         private RequestInterface     $request,
         private ComponentDataFactory $componentDataFactory,
+        private Signature            $signature,
     )
     {
     }
@@ -27,9 +28,7 @@ readonly class Request
         $receivedSignature = $data['signature'];
         unset($data['signature']);
 
-        $query = http_build_query($data);
-
-        $signature = hash_hmac('sha256', $query, 'secret');
+        $signature = $this->signature->sign($data);
 
         return $receivedSignature === $signature;
     }

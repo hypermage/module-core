@@ -10,6 +10,7 @@ readonly class HxParamsFactory
 {
     public function __construct(
         private ComponentDataFactory $componentDataFactory,
+        private Signature            $signature,
     )
     {
     }
@@ -17,7 +18,8 @@ readonly class HxParamsFactory
     public function create(BlockInterface $block): HxParams {
         return new HxParams(
             $block,
-            $this->componentDataFactory
+            $this->componentDataFactory,
+            $this->signature,
         );
     }
 }

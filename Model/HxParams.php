@@ -24,6 +24,7 @@ class HxParams
     public function __construct(
         private readonly BlockInterface       $block,
         private readonly ComponentDataFactory $componentDataFactory,
+        private readonly Signature            $signature,
     )
     {
     }
@@ -48,8 +49,9 @@ class HxParams
     public function getRequestUrl(): string
     {
         $componentData = $this->componentDataFactory->fromBlock($this->block);
+        $signature = $this->signature->sign($componentData->toArray());
 
-        return self::COMPONENT_ENDPOINT . '?' . $componentData . '&signature=' . $componentData->getSignature();
+        return self::COMPONENT_ENDPOINT . '?' . $componentData . '&signature=' . $signature;
     }
 
     public function getHxGet(): string

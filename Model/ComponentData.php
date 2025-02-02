@@ -72,13 +72,4 @@ readonly class ComponentData
     {
         return $this->data;
     }
-
-    /**
-     * We must add a signature to the request to prevent client side from manipulating the request
-     * Using hash_hmac with sha256 algorithm we can ensure integrity of the request
-     */
-    public function getSignature(): string
-    {
-        return hash_hmac('sha256', (string)$this, 'secret');
-    }
 }
