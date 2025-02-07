@@ -26,20 +26,6 @@ readonly class Htmx implements ArgumentInterface
         return isset($_SERVER['HTTP_HX_REQUEST']);
     }
 
-    /**
-     * Turn block into a piece of data to send to the server so it knows which block to fetch
-     */
-    public function serialize(BlockInterface $block): array
-    {
-        $specification = $this->blockSpecificationFactory->fromBlock($block)->toArray();
-        $signature = $this->signature->sign($specification);
-
-        return [
-            'signature' => $signature,
-            'specification' => $specification,
-        ];
-    }
-
     public function getBlockSpecification(BlockInterface $block): BlockSpecification
     {
         return $this->blockSpecificationFactory->fromBlock($block);
