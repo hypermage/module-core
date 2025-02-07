@@ -27,14 +27,22 @@ class Signature
      */
     public function sign(array $data): string
     {
+        unset($data['signature']);
+
         return hash_hmac(self::ALGORITHM, http_build_query($data), $this->getHash());
     }
 
     /**
      * @throws RuntimeException
      */
-    public function validate(array $data, string $signature): bool
+    public function validate(array $data): bool
     {
+        if (!isset($data['signature'])) {
+            return false;
+        }
+
+        $signature = $data['signature'];
+
         $expectedSignature = $this->sign($data);
 
         return hash_equals($expectedSignature, $signature);

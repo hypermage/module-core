@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hypermage\Core\Model;
 
-readonly class ComponentData
+readonly class BlockSpecification
 {
     public function __construct(
         protected object $class,
@@ -12,7 +12,7 @@ readonly class ComponentData
 
         protected string $fullActionName,
         protected array  $layoutHandles,
-        protected string $name,
+        protected string $nameInLayout,
 
         protected array  $objects = [],
         protected array  $data = [],
@@ -32,7 +32,7 @@ readonly class ComponentData
             'template' => $this->getTemplate(),
             'fullActionName' => $this->getFullActionName(),
             'layoutHandles' => $this->getLayoutHandles(),
-            'name' => $this->getName(),
+            'nameInLayout' => $this->getNameInLayout(),
             'objects' => $this->getObjects(),
             'data' => $this->getData(),
         ];
@@ -58,9 +58,9 @@ readonly class ComponentData
         return $this->layoutHandles;
     }
 
-    public function getName(): string
+    public function getNameInLayout(): string
     {
-        return $this->name;
+        return $this->nameInLayout;
     }
 
     public function getObjects(): array

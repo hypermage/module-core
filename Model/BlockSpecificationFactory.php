@@ -9,14 +9,14 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\BlockInterface;
 
-readonly class ComponentDataFactory
+readonly class BlockSpecificationFactory
 {
     final public const array REQUIRED_DATA_KEYS = [
         'class',
         'template',
         'fullActionName',
         'layoutHandles',
-        'name',
+        'nameInLayout',
         'objects',
         'data'
     ];
@@ -29,9 +29,9 @@ readonly class ComponentDataFactory
     {
     }
 
-    public function fromBlock(BlockInterface $block): ComponentData
+    public function fromBlock(BlockInterface $block): BlockSpecification
     {
-        return new ComponentData(
+        return new BlockSpecification(
             $block,
             $block->getTemplate(),
 
@@ -47,17 +47,17 @@ readonly class ComponentDataFactory
     /**
      * @throws InvalidArgumentException
      */
-    public function fromArray(array $data): ComponentData
+    public function fromArray(array $data): BlockSpecification
     {
         $this->validateArray($data);
 
-        return new ComponentData(
+        return new BlockSpecification(
             $data['class'],
             $data['template'],
 
             $data['fullActionName'],
             $data['layoutHandles'],
-            $data['name'],
+            $data['nameInLayout'],
 
             $data['objects'],
             $data['data']
@@ -67,11 +67,20 @@ readonly class ComponentDataFactory
     /**
      * @throws InvalidArgumentException
      */
-    public function fromRequest(RequestInterface $request): ComponentData
+    public function fromRequest(RequestInterface $request): BlockSpecification
     {
-        $data = $request->getParams();
+        $params = $request->getParams();
+
+        if (!array_key_exists('block_specification', $params)) {
+            throw new InvalidArgumentException("Missing required key: 'block_specification'");
+        }
+
+        $data = $params['block_specification'];
 
         $data['class'] = $this->objectManger->create($data['class']);
+
+        $this->validateArray($data);
+
 
         return $this->fromArray($data);
     }
@@ -102,8 +111,8 @@ readonly class ComponentDataFactory
         if (!is_array($data['layoutHandles'])) {
             throw new InvalidArgumentException("The 'layoutHandles' value must be an array.");
         }
-        if (!is_string($data['name'])) {
-            throw new InvalidArgumentException("The 'name' value must be a string.");
+        if (!is_string($data['nameInLayout'])) {
+            throw new InvalidArgumentException("The 'nameInLayout' value must be a string.");
         }
         if (!is_array($data['objects'])) {
             throw new InvalidArgumentException("The 'objects' value must be an array.");
