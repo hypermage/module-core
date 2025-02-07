@@ -1,5 +1,5 @@
 var config = {
     deps: [
-        "Hypermage_Core/js/custom-script"
+        "Hypermage_Core/js/jquery-event-bridge"
     ]
 };

@@ -49,6 +49,8 @@ readonly class BlockSpecificationFactory
      */
     public function fromArray(array $data): BlockSpecification
     {
+        $this->parseArray($data);
+
         $this->validateArray($data);
 
         return new BlockSpecification(
@@ -64,25 +66,11 @@ readonly class BlockSpecificationFactory
         );
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function fromRequest(RequestInterface $request): BlockSpecification
+    private function parseArray(array &$data): void
     {
-        $params = $request->getParams();
-
-        if (!array_key_exists('block_specification', $params)) {
-            throw new InvalidArgumentException("Missing required key: 'block_specification'");
+        if (is_string($data['class'])) {
+            $data['class'] = $this->objectManger->create($data['class']);
         }
-
-        $data = $params['block_specification'];
-
-        $data['class'] = $this->objectManger->create($data['class']);
-
-        $this->validateArray($data);
-
-
-        return $this->fromArray($data);
     }
 
     /**

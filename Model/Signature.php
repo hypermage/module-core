@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hypermage\Core\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
 use RuntimeException;
 
 /**

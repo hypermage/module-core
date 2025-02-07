@@ -15,12 +15,19 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Element\BlockInterface;
 
+/**
+ * Simple controller to fetch a block without performing any other mutations.
+ * Perfect for fetching static components.
+ * However, if you have an create, update or delete action, you should create a separate controller-
+ * that performs the mutation and returns the updated block.
+ * You can use this class as an example to create such a controller.
+ */
 class Block implements HttpGetActionInterface
 {
     public function __construct(
         private readonly BlockFactory              $blockFactory,
-        private readonly BlockSpecificationFactory $blockSpecificationFactory,
         private readonly BlockResultFactory        $blockResultFactory,
+        private readonly BlockSpecificationFactory $blockSpecificationFactory,
         private readonly RequestInterface          $request,
         private readonly Signature                 $signature,
     )
@@ -32,11 +39,17 @@ class Block implements HttpGetActionInterface
      */
     public function execute(): ResultInterface|ResponseInterface
     {
-        if (!$this->validateRequest()) {
+        $params = $this->request->getParams();
+
+        if (!$this->validateParams($params)) {
             throw new Exception('Invalid request');
         }
 
-        $block = $this->getBlock();
+        if (!isset($params['block_specification'])) {
+            throw new Exception('Block specification is required');
+        }
+
+        $block = $this->getBlock($params['block_specification']);
         if (!$block) {
             throw new Exception('Block not found');
         }
@@ -44,20 +57,14 @@ class Block implements HttpGetActionInterface
         return $this->blockResultFactory->create($block);
     }
 
-    private function validateRequest(): bool
+    private function validateParams(array $params): bool
     {
-        $params = $this->request->getParams();
-
-        if (!isset($params['signature'])) {
-            return false;
-        }
-
         return $this->signature->validate($params);
     }
 
-    private function getBlock(): ?BlockInterface
+    private function getBlock(array $blockSpecificationData): ?BlockInterface
     {
-        $blockSpecification = $this->blockSpecificationFactory->fromRequest($this->request);
+        $blockSpecification = $this->blockSpecificationFactory->fromArray($blockSpecificationData);
         return $this->blockFactory->create($blockSpecification);
     }
 }
