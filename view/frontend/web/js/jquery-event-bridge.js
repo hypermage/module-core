@@ -3,9 +3,9 @@ define(["jquery"], function ($) {
 
     const originalTrigger = $.fn.trigger;
 
-    $.fn.trigger = function (event, data) {
+    $.fn.trigger = function (event, detail) {
         if (typeof event === "string") {
-            const nativeEvent = new CustomEvent(event, { detail: data });
+            const nativeEvent = new CustomEvent(event, { detail });
 
             this.each(function () {
                 this.dispatchEvent(nativeEvent);
