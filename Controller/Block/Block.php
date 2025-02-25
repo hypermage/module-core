@@ -54,10 +54,6 @@ class Block implements HttpGetActionInterface
             throw new Exception('Block not found');
         }
 
-        if ($blockAdditionalData = $params['block_additional_data'] ?? null) {
-            $block->addData($blockAdditionalData);
-        }
-
         return $this->blockResultFactory->create($block);
     }
 
